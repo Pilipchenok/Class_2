@@ -123,7 +123,7 @@ topit::p_t topit::VLine::next(p_t prev) const{
     if(prev.x == start.x && start.y <= prev.y && prev.y <= end.y){
         return {prev.x, prev.y + 1};
     }
-    return start;
+    throw std::logic_error("bad impl");
 }
 
 topit::Rect::Rect(p_t u_l, p_t r_b):
@@ -137,5 +137,16 @@ topit::p_t topit::Rect::begin() const{
 }
 
 topit::p_t topit::Rect::next(p_t prev) const{
-    
+    if(prev.x == upper_left.x && prev.y > right_bottom.y){
+        return {prev.x, prev.y - 1};
+    }else if(prev.x < right_bottom.x && prev.y == right_bottom.y){
+        return {prev.x + 1, prev.y};
+    }else if(prev.x == right_bottom.x && prev.y < upper_left.y){
+        return {prev.x, prev.y + 1};
+    }else if(prev.x > upper_left.x && prev.y == upper_left.y){
+        return {prev.x - 1, prev.y};
+    }else if(prev.x == upper_left.x && prev.y == upper_left.y){
+        return upper_left;
+    }
+    throw std::logic_error("bad impl");
 }
