@@ -21,6 +21,8 @@ namespace topit{
 
     size_t points(const IDraw& d, p_t** pts, size_t& s);
     f_t frame(const p_t* pts, size_t s);
+    char* canvas(f_t fr, char fill);
+    void paint(char* cnv, f_t fr, p_t p, char fill);
 }
 int main(){
     using topit::IDraw;
@@ -39,7 +41,11 @@ int main(){
         for (size_t i = 0; i < 3; ++i){
             s += points(*(shps[i]), &pts, s);
         }
-        f_t fr;
+        f_t fr = frame(pts, s);
+        char* cnv = canvas(fr, '.');
+        for(size_t i = 0; i < s; ++i){
+            paint(cnv,  fr, pts[i], '#');
+        }
         // TODO:
         // [1] достать все точки из фигур
         // [2] посчитать ограничивающий прямоугольник
@@ -48,6 +54,7 @@ int main(){
         // [4]
         // - 
         // [5]
+        delete[] cnv;
     }catch(...){
         err = 2;
         std::cerr << "Bad drawing" << "\n";
