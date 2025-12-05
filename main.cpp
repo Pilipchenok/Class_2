@@ -23,6 +23,24 @@ namespace topit{
     f_t frame(const p_t* pts, size_t s);
     char* canvas(f_t fr, char fill);
     void paint(char* cnv, f_t fr, p_t p, char fill);
+    void flush(std::ostream& os, const char* cnv, f_t fr);
+
+    struct VLine: IDraw{
+        VLine(p_t s, p_t e);
+        p_t begin() const override;
+        p_t next(p_t) const override;
+
+        p_t start, end;
+    };
+
+    struct Rect: IDraw{
+        Rect(p_t u_l, p_t r_b);
+        p_t begin() const override;
+        p_t next(p_t) const override;
+
+        p_t upper_left;
+        p_t right_bottom;
+    };
 }
 int main(){
     using topit::IDraw;
@@ -46,14 +64,7 @@ int main(){
         for(size_t i = 0; i < s; ++i){
             paint(cnv,  fr, pts[i], '#');
         }
-        // TODO:
-        // [1] достать все точки из фигур
-        // [2] посчитать ограничивающий прямоугольник
-        // [3]
-        // - 
-        // [4]
-        // - 
-        // [5]
+        flush(std::cout, cnv, fr);
         delete[] cnv;
     }catch(...){
         err = 2;
@@ -93,4 +104,38 @@ bool topit::operator==(p_t a, p_t b){
 
 bool topit::operator!=(p_t a, p_t b){
     return !(a == b);
+}
+
+topit::VLine::VLine(p_t s, p_t e):
+    IDraw(),
+    start(s),
+    end(e)
+{}
+
+topit::p_t topit::VLine::begin() const{
+    return start;
+}
+
+topit::p_t topit::VLine::next(p_t prev) const{
+    if(prev == end){
+        return start;
+    }
+    if(prev.x == start.x && start.y <= prev.y && prev.y <= end.y){
+        return {prev.x, prev.y + 1};
+    }
+    return start;
+}
+
+topit::Rect::Rect(p_t u_l, p_t r_b):
+    IDraw(),
+    upper_left(u_l),
+    right_bottom(r_b)
+{}
+
+topit::p_t topit::Rect::begin() const{
+    return upper_left;
+}
+
+topit::p_t topit::Rect::next(p_t prev) const{
+    
 }
