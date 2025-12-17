@@ -12,18 +12,14 @@ topit::p_t topit::Rect::begin() const{
 }
 
 topit::p_t topit::Rect::next(p_t prev) const{
-    if (prev.x == upper_left.x && prev.y == upper_left.y) {
-        return {prev.x + 1, prev.y - 1};
-    } else if (prev.x == upper_left.x && prev.y > right_bottom.y) {
+    if (prev.x == upper_left.x && prev.y <= upper_left.y && prev.y > right_bottom.y) {
         return {prev.x, prev.y - 1};
-    } else if (prev.x < right_bottom.x && prev.y == right_bottom.y) {
+    } else if (prev.x < right_bottom.x && prev.x >= upper_left.x && prev.y == right_bottom.y) {
         return {prev.x + 1, prev.y};
-    } else if (prev.x == right_bottom.x && prev.y < upper_left.y) {
+    } else if (prev.x == right_bottom.x && prev.y < upper_left.y && prev.y >= right_bottom.y) {
         return {prev.x, prev.y + 1};
-    } else if (prev.x > upper_left.x && prev.y == upper_left.y) {
+    } else if (prev.x > upper_left.x && prev.x <= right_bottom.x && prev.y == upper_left.y) {
         return {prev.x - 1, prev.y};
-    } else if (prev.x == upper_left.x + 1 && prev.y == upper_left.y) {
-        return {prev.x - 2, prev.y};
     }
     throw std::logic_error("bad impl");
 }

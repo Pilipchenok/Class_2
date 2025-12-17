@@ -13,7 +13,7 @@ int main(){
     try{
         shps[0] = new Dot(0, 0);
         shps[1] = new Dot(5, 7);
-        shps[2] = new topit::Rect({2, 2}, {5, 10});
+        shps[2] = new topit::Rect({2, 10}, {5, 3});
 
         for (size_t i = 0; i < 3; ++i){
             s += points(*(shps[i]), &pts, s);
