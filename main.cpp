@@ -1,18 +1,9 @@
 #include <iostream>
+#include "geom.hpp"
+#include "idraw.hpp"
 
 namespace topit{
-    struct p_t{ int x, y; };
-    bool operator==(p_t, p_t);
-    bool operator!=(p_t, p_t);
-    struct f_t { p_t aa, bb; };
-    size_t rows(f_t fr);
-    size_t cols(f_t fr);
-
-    struct IDraw{
-        virtual ~IDraw() = default; 
-        virtual p_t begin() const = 0;
-        virtual p_t next(p_t) const = 0;
-    };
+    
 
     struct Dot: IDraw{
         Dot(int x, int y);
@@ -81,15 +72,6 @@ int main(){
     delete shps[1];
     delete shps[2];
     return err;
-}
-
-size_t topit::rows(f_t fr)
-{
-    return fr.bb.y - fr.aa.y + 1;
-}
-
-size_t topit::cols(f_t fr){
-    return fr.bb.x - fr.aa.x + 1;
 }
 
 char* topit::canvas(f_t fr, char fill)
@@ -185,14 +167,6 @@ topit::p_t topit::Dot::next(p_t prev) const{
         throw std::logic_error("bad impl");
     }
     return d;
-}
-
-bool topit::operator==(p_t a, p_t b){
-    return a.x == b.x && a.y == b.y;
-}
-
-bool topit::operator!=(p_t a, p_t b){
-    return !(a == b);
 }
 
 topit::VLine::VLine(p_t s, p_t e):
